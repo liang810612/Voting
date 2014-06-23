@@ -1,0 +1,48 @@
+// ----------------------------
+// projects/collatz/Collatz.c++
+// Copyright (C) 2014
+// Glenn P. Downing
+// ----------------------------
+
+// --------
+// includes
+// --------
+
+#include <cassert>  // assert
+#include <iostream> // endl, istream, ostream
+#include <utility>  // make_pair, pair
+
+#include "Voting.h"
+
+// ------------
+// voting_read
+// ------------
+
+bool voting_read (std::istream& r) {
+    std::string caseNum;
+    if (!r)
+        return false;
+    std::getline(r, caseNum);
+    return true; 
+}
+	
+
+// -------------
+// collatz_print
+// -------------
+
+/*
+void collatz_print (std::ostream& w, int i, int j, int v) {
+    w << i << " " << j << " " << v << std::endl;}
+*/
+// -------------
+// collatz_solve
+// -------------
+
+void collatz_solve (std::istream& r, std::ostream& w) {
+    while (true) {
+        bool p = collatz_read(r);
+   
+        //collatz_print(w, p.first, p.second, v);
+    }
+}
