@@ -1,7 +1,7 @@
 // -------------------------------
 // projects/Voting/RunVoting.c++
 // Copyright (C) 2014
-// Glenn P. Downing
+// Terry Liang, Sharon Chung
 // -------------------------------
 
 /*
