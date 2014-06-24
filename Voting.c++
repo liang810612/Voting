@@ -99,7 +99,7 @@ bool voting_read (std::istream& r) {
 
 	                        ballot[ballotNum][candidNum] = atoi(token.c_str());
 
-	                        //cout << "ballot list: " << ballot[ballotNum][candidNum] << endl;
+	                        cout << "ballot list: " << ballot[ballotNum][candidNum] << endl;
 	                        candidNum++;
 	                    }
 	                    ballotNum++;
@@ -130,7 +130,6 @@ bool voting_read (std::istream& r) {
 //*************************TODO******************************
     //need to make ballotNum = 0 for next case
 
-
     return true; 
 }
 	
@@ -152,32 +151,72 @@ vector<string> voting_eval(){
 	vector<string> resultName;
 	vector<int> loser;
 	vector<int> count; //the ballot counter
+    int winnerIndex;
+    int maximumVoter = 0;
+    int minimumVoter = ballotNum;
+    bool win = true;
 
 	cout << "candidTotalNum: " << candidTotalNum << endl;
 	cout << "ballotNum: " << ballotNum<< endl;
 	cout << "caseNum: " << caseNum << endl;
 
-	/*//no cache ver
+	//no cache ver
 	for(int i = 0; i < candidTotalNum; i++){
 		for(int j = 0; j < ballotNum; j++){
 
 			//skip index 0 for easy readible reason
 			count[ballot[i][j]]++;
 		}
+    }
+
+    // find max and min votes of a round
+    for(int i = 0; i < candidTotalNum; i++){
+        if(win){
+            minimumVoter = min(minimumVoter, count[i]);
+            maximumVoter = max(maximumVoter, count[i]);
+            if(maximumVoter == count[i]){
+                winnerIndex = ballot[i][0];
+            }
+        }
+    }
+
+    //candidates with no ballots
+    for(int i = 0; i < candidTotalNum; i++){
+        if(count[i] == 0){
+            win = false;
+        }
+    }
+    //majority wins
+    if(maximumVoter > (ballotNum/2) || maximumVoter == minimumVoter){
+        for(int i = 0; i<candidTotalNum; i++){
+            if(count[i] == maximumVoter){
+                  resultName.push_back(candidName[i]);
+            }
+        }
+    }
+
+    else{
+    //find losers
+        for(int i = 0; i < candidTotalNum ; i++){
+            if(count[i] == minimumVoter){
+                loser.push_back(candidName[i]);
+            }
+        }
+    }
+    //tied candidates
+    // find tvotes
+                
 
 		//if there is a winner with more than half votes and most votes 
-		auto it = max_element(std::begin(count), std::end(count));
-		if(it > (ballotNum / 2)){
-			resultName.push_back()
-		}
+		// auto it = max_element(count.begin(), count.end());
+		// if(it > (ballotNum / 2)){
+		// 	resultName.push_back();
+		// }
 
-
-	}*/
 	return resultName;
-
-
-
 }
+
+
 
 // -------------
 // voting_solve
