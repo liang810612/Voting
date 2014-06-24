@@ -20,6 +20,12 @@
 #include "Voting.h"
 using namespace std;
 
+int ballot[1000][20];
+string candidName[20];
+int candidTotalNum;
+int ballotNum;
+int caseNum;
+
 // ------------
 // voting_read
 // ------------
@@ -29,16 +35,18 @@ bool voting_read (std::istream& r) {
 
     string line;
     istringstream iss;
-    int caseNum = 0;;
-    int candidTotalNum = 0;
-    int ballotNum = 0;
+    caseNum = 0;;
+    candidTotalNum = 0;
+    ballotNum = 0;
     int candidNum = 0;
 
     bool caseStart = false;
     bool blank = false;
     bool candidNumCheck = false;
-    int ballot[1000][20] = {};
-    string candidName[20] = {};
+
+    ballot[1000][20] = {};
+    candidName[20] = {};
+
     int c = 0; //index for candidName array
 
 
@@ -47,21 +55,16 @@ bool voting_read (std::istream& r) {
         iss.clear();
         iss.str(line);
 
-        
-        cout << "##########################start" << endl;
+    
 
         if(!caseStart){
             caseNum = atoi(line.c_str());
             caseStart = true;
-
-            cout << caseNum << endl;
         }
         else{
             //check for blank line
 
             if(line.empty()){
-
-                cout << "this is a blank line" << endl;
 
                 if(!blank){
                     //case just started
@@ -80,9 +83,8 @@ bool voting_read (std::istream& r) {
                     candidTotalNum = atoi(line.c_str());
                     candidNumCheck = false; 
 
-                    cout << candidTotalNum << endl;
                 }
-                else{
+                else{// check and put tokens into specific array
                 	if(isalpha(line[0])){
                 		//It's checking candidate's name
                 		candidName[c] = line;
@@ -90,13 +92,10 @@ bool voting_read (std::istream& r) {
                 	}
                 	else{
                 		//It's checking ballot
-	                	cout << "checking Ballot" << endl;
 
 	                    string token;
 	                    stringstream s(line);
 	                    while(getline(s, token, ' ')){
-
-	                    	cout << "token" << token << endl;
 
 	                        ballot[ballotNum][candidNum] = atoi(token.c_str());
 
@@ -106,20 +105,19 @@ bool voting_read (std::istream& r) {
 	                    ballotNum++;
 	                    candidNum  = 0;
                 	}
-
-                }
+                }// end of checking token array
                 
             }
 
-        }
+        }// end for caseStart else
 
     }
-/*
+	/*
     for(int k = 0; k < c; k++){
     	cout << candidName[k] << endl;
     }
     */
-
+    /*
     for(int i = 0; i < ballotNum; i++){
 
         for(int j = 0; j < candidTotalNum; j++){
@@ -127,6 +125,7 @@ bool voting_read (std::istream& r) {
         }
         cout << endl;
     }
+    */
 
 //*************************TODO******************************
     //need to make ballotNum = 0 for next case
@@ -144,14 +143,51 @@ bool voting_read (std::istream& r) {
 //void voting_print (std::ostream& w, int i, int j, int v) {
     //w << i << " " << j << " " << v << std::endl;}
 
+
+// -------------
+// voting_eval
+// -------------
+
+vector<string> voting_eval(){
+	vector<string> resultName;
+	vector<int> loser;
+	vector<int> count; //the ballot counter
+
+	cout << "candidTotalNum: " << candidTotalNum << endl;
+	cout << "ballotNum: " << ballotNum<< endl;
+	cout << "caseNum: " << caseNum << endl;
+
+	/*//no cache ver
+	for(int i = 0; i < candidTotalNum; i++){
+		for(int j = 0; j < ballotNum; j++){
+
+			//skip index 0 for easy readible reason
+			count[ballot[i][j]]++;
+		}
+
+		//if there is a winner with more than half votes and most votes 
+		auto it = max_element(std::begin(count), std::end(count));
+		if(it > (ballotNum / 2)){
+			resultName.push_back()
+		}
+
+
+	}*/
+	return resultName;
+
+
+
+}
+
 // -------------
 // voting_solve
 // -------------
 
 void voting_solve (std::istream& r, std::ostream& w) {
     while (true) {
-        bool p = voting_read(r);
-   
+        bool check = voting_read(r);
+        vector<string> winner = voting_eval();
+   		//cout << winner << endl;
         //voting_print(w, p.first, p.second, v);
     }
 }

@@ -13,6 +13,14 @@
 
 #include <iostream> // istream, ostream
 #include <utility>  // pair
+#include <string>
+#include <vector>
+
+extern int ballot[1000][20];
+extern std::string candidName[20];
+extern int candidTotalNum;
+extern int ballotNum;
+extern int caseNum;
 
 
 // ------------
@@ -39,6 +47,12 @@ bool voting_read (std::istream&);
  * @param v the max cycle length
  */
 void voting_print (std::ostream&, int, int, int);
+
+// -------------
+// voting_eval
+// -------------
+
+std::vector<std::string> voting_eval();
 
 // -------------
 // voting_solve
