@@ -1,18 +1,18 @@
 // -------------------------------
-// projects/collatz/RunCollatz.c++
+// projects/Voting/RunVoting.c++
 // Copyright (C) 2014
 // Glenn P. Downing
 // -------------------------------
 
 /*
 To compile the program:
-    % g++-4.7 -fprofile-arcs -ftest-coverage -pedantic -std=c++11 -Wall Collatz.c++ RunCollatz.c++ -o RunCollatz
+    % g++-4.7 -fprofile-arcs -ftest-coverage -pedantic -std=c++11 -Wall Voting.c++ RunVoting.c++ -o RunVoting
 
 To run the program:
-    % valgrind RunCollatz < RunCollatz.in
+    % valgrind RunVoting < RunVoting.in
 
 To obtain coverage of the run:
-    % gcov-4.7 -b Collatz.c++ RunCollatz.c++
+    % gcov-4.7 -b Voting.c++ RunVoting.c++
 
 To configure Doxygen:
     % doxygen -g
@@ -54,15 +54,15 @@ int main () {
     return 0;}
 
 /*
-% g++-4.7 -fprofile-arcs -ftest-coverage -pedantic -std=c++11 -Wall Collatz.c++ RunCollatz.c++ -o RunCollatz
+% g++-4.7 -fprofile-arcs -ftest-coverage -pedantic -std=c++11 -Wall Voting.c++ RunVoting.c++ -o RunVoting
 
 
 
-% valgrind RunCollatz < RunCollatz.in > RunCollatz.out
+% valgrind RunVoting < RunVoting.in > RunVoting.out
 ==17119== Memcheck, a memory error detector
 ==17119== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
 ==17119== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
-==17119== Command: RunCollatz
+==17119== Command: RunVoting
 ==17119==
 ==17119==
 ==17119== HEAP SUMMARY:
@@ -76,33 +76,33 @@ int main () {
 
 
 
-% gcov-4.7 -b Collatz.c++
-File 'Collatz.c++'
+% gcov-4.7 -b Voting.c++
+File 'Voting.c++'
 Lines executed:100.00% of 17
 Branches executed:100.00% of 18
 Taken at least once:61.11% of 18
 Calls executed:89.47% of 19
-Creating 'Collatz.c++.gcov'
+Creating 'Voting.c++.gcov'
 ...
 
 
 
-% cat Collatz.c++.gcov
+% cat Voting.c++.gcov
 ...
 
 
 
-% gcov-4.7 -b RunCollatz.c++
-File 'RunCollatz.c++'
+% gcov-4.7 -b RunVoting.c++
+File 'RunVoting.c++'
 Lines executed:100.00% of 3
 Branches executed:100.00% of 4
 Taken at least once:50.00% of 4
 Calls executed:100.00% of 2
-Creating 'RunCollatz.c++.gcov'
+Creating 'RunVoting.c++.gcov'
 ...
 
 
 
-% cat RunCollatz.c++.gcov
+% cat RunVoting.c++.gcov
 ...
 */

@@ -38,6 +38,8 @@ bool voting_read (std::istream& r) {
     bool blank = false;
     bool candidNumCheck = false;
     int ballot[1000][20] = {};
+    string candidName[20] = {};
+    int c = 0; //index for candidName array
 
 
 
@@ -56,7 +58,8 @@ bool voting_read (std::istream& r) {
         }
         else{
             //check for blank line
-            if(line[0] == '\n'){
+
+            if(line.empty()){
 
                 cout << "this is a blank line" << endl;
 
@@ -80,14 +83,30 @@ bool voting_read (std::istream& r) {
                     cout << candidTotalNum << endl;
                 }
                 else{
-                    //It is checking ballot
-                    string token;
-                    stringstream s(line);
-                    while(getline(s, token, ' ')){
-                        ballot[ballotNum][candidNum] = atoi(token.c_str());
-                        candidNum++;
-                    }
-                    ballotNum++;
+                	if(isalpha(line[0])){
+                		//It's checking candidate's name
+                		candidName[c] = line;
+                		c++;
+                	}
+                	else{
+                		//It's checking ballot
+	                	cout << "checking Ballot" << endl;
+
+	                    string token;
+	                    stringstream s(line);
+	                    while(getline(s, token, ' ')){
+
+	                    	cout << "token" << token << endl;
+
+	                        ballot[ballotNum][candidNum] = atoi(token.c_str());
+
+	                        //cout << "ballot list: " << ballot[ballotNum][candidNum] << endl;
+	                        candidNum++;
+	                    }
+	                    ballotNum++;
+	                    candidNum  = 0;
+                	}
+
                 }
                 
             }
@@ -95,6 +114,11 @@ bool voting_read (std::istream& r) {
         }
 
     }
+/*
+    for(int k = 0; k < c; k++){
+    	cout << candidName[k] << endl;
+    }
+    */
 
     for(int i = 0; i < ballotNum; i++){
 
@@ -104,16 +128,10 @@ bool voting_read (std::istream& r) {
         cout << endl;
     }
 
-/*
-    string temp = strtok(iss, "\n");
-    while (temp != NULL){
-        cout << temp << endl;
-        temp = strtok(NULL, "\n");
-    }
-    */
+//*************************TODO******************************
+    //need to make ballotNum = 0 for next case
 
 
-    //std::cout << caseNum << std::endl;
     return true; 
 }
 	
