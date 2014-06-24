@@ -46,15 +46,20 @@ bool voting_read (std::istream& r) {
         iss.str(line);
 
         
-        cout << line << endl;
+        cout << "##########################start" << endl;
 
         if(!caseStart){
             caseNum = atoi(line.c_str());
             caseStart = true;
+
+            cout << caseNum << endl;
         }
         else{
             //check for blank line
             if(line[0] == '\n'){
+
+                cout << "this is a blank line" << endl;
+
                 if(!blank){
                     //case just started
                     blank = true;
@@ -71,6 +76,8 @@ bool voting_read (std::istream& r) {
                     //if it is on the candidate number line
                     candidTotalNum = atoi(line.c_str());
                     candidNumCheck = false; 
+
+                    cout << candidTotalNum << endl;
                 }
                 else{
                     //It is checking ballot
@@ -86,12 +93,15 @@ bool voting_read (std::istream& r) {
             }
 
         }
-        
 
+    }
 
-        
+    for(int i = 0; i < ballotNum; i++){
 
-
+        for(int j = 0; j < candidTotalNum; j++){
+            cout << ballot[i][j] << " ";
+        }
+        cout << endl;
     }
 
 /*
@@ -109,21 +119,21 @@ bool voting_read (std::istream& r) {
 	
 
 // -------------
-// collatz_print
+// voting_print
 // -------------
 
-/*
-void collatz_print (std::ostream& w, int i, int j, int v) {
-    w << i << " " << j << " " << v << std::endl;}
-*/
+
+//void voting_print (std::ostream& w, int i, int j, int v) {
+    //w << i << " " << j << " " << v << std::endl;}
+
 // -------------
-// collatz_solve
+// voting_solve
 // -------------
 
 void voting_solve (std::istream& r, std::ostream& w) {
     while (true) {
         bool p = voting_read(r);
    
-        //collatz_print(w, p.first, p.second, v);
+        //voting_print(w, p.first, p.second, v);
     }
 }
