@@ -1,7 +1,7 @@
 // --------------------------
-// projects/collatz/Collatz.h
+// projects/voting/Voting.h
 // Copyright (C) 2014
-// Glenn P. Downing
+// Terry Liang, Sharon Chung 
 // --------------------------
 
 #ifndef Voting_h
