@@ -20,32 +20,28 @@
 #include "Voting.h"
 using namespace std;
 
-int ballot[1000][20];
-string candidName[20];
-int candidTotalNum;
-int ballotNum;
-int caseNum;
+
 
 // ------------
 // voting_read
 // ------------
 
-bool voting_read (std::istream& r) {
+bool voting_read (std::istream& r, int ballot[1000][20], string candidName[20] , int cTN, int bN, int cN) {
     //char split_char = "\n";
 
     string line;
     istringstream iss;
-    caseNum = 0;;
-    candidTotalNum = 0;
-    ballotNum = 0;
+
+    
     int candidNum = 0;
+    int candidTotalNum = cTN;
+    int ballotNum = bN;
+    int caseNum = cN;
 
     bool caseStart = false;
     bool blank = false;
     bool candidNumCheck = false;
 
-    ballot[1000][20] = {};
-    candidName[20] = {};
 
     int c = 0; //index for candidName array
 
@@ -98,8 +94,6 @@ bool voting_read (std::istream& r) {
 	                    while(getline(s, token, ' ')){
 
 	                        ballot[ballotNum][candidNum] = atoi(token.c_str());
-
-	                        cout << "ballot list: " << ballot[ballotNum][candidNum] << endl;
 	                        candidNum++;
 	                    }
 	                    ballotNum++;
@@ -112,23 +106,28 @@ bool voting_read (std::istream& r) {
         }// end for caseStart else
 
     }
-	/*
-    for(int k = 0; k < c; k++){
-    	cout << candidName[k] << endl;
-    }
-    */
-    /*
-    for(int i = 0; i < ballotNum; i++){
+	
+    
+    // for(int k = 0; k < c; k++){
+    // 	cout << candidName[k] << endl;
+    // }
+    
+    
+    // for(int i = 0; i < ballotNum; i++){
 
-        for(int j = 0; j < candidTotalNum; j++){
-            cout << ballot[i][j] << " ";
-        }
-        cout << endl;
-    }
-    */
+    //     for(int j = 0; j < candidTotalNum; j++){
+    //         cout << ballot[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
+    
+    
 
 //*************************TODO******************************
     //need to make ballotNum = 0 for next case
+
+   //cout << candidNum << " ";
+    voting_eval(ballot, candidName, candidTotalNum, ballotNum);
 
     return true; 
 }
@@ -147,62 +146,131 @@ bool voting_read (std::istream& r) {
 // voting_eval
 // -------------
 
-vector<string> voting_eval(){
-	vector<string> resultName;
+
+vector<string> voting_eval(int ballot[1000][20], string candidName[20], int candidTotalNum, int ballotNum){
+	
+
+
+    vector<string> resultName;
 	vector<int> loser;
 	vector<int> count; //the ballot counter
-    int winnerIndex;
+    vector<int> winnerIndex;
     int maximumVoter = 0;
     int minimumVoter = ballotNum;
+    int minCandid = -1;
+    int maxCan;
     bool win = true;
+    int TEMP = 0;
 
-	cout << "candidTotalNum: " << candidTotalNum << endl;
-	cout << "ballotNum: " << ballotNum<< endl;
-	cout << "caseNum: " << caseNum << endl;
 
-	//no cache ver
-	for(int i = 0; i < candidTotalNum; i++){
+    cout << candidTotalNum << endl;
+    
+
+   // cout << count[0] << endl;
+
+
+	// // //no cache ver
+	//for(int i = 0; i < candidTotalNum; i++){
+
+
 		for(int j = 0; j < ballotNum; j++){
 
 			//skip index 0 for easy readible reason
-			count[ballot[i][j]]++;
+
+            TEMP = ballot[j][0] - count.size();
+
+           
+            
+
+            if(TEMP >= 1){
+                while(TEMP > 0){
+                    count.push_back(0);
+                    TEMP--;
+                }
+                count[ballot[j][0]-1] +=1; //since index starts from 0
+            }
+            else{//( TEMP < 1)
+                count[ballot[j][0]-1] += 1;
+            }
+
+            cout << "count size : " << count.size() << endl;
+            cout << ballot[j][0] << " " << count[ballot[j][0]-1] << endl;
+            //cout << count[j] << " ";
 		}
-    }
+
+
+        cout << endl;
+
+
+
+
+
+
+    //}
+
+
+    
+
+
 
     // find max and min votes of a round
     for(int i = 0; i < candidTotalNum; i++){
+
+        int temp = 0;
         if(win){
             minimumVoter = min(minimumVoter, count[i]);
-            maximumVoter = max(maximumVoter, count[i]);
-            if(maximumVoter == count[i]){
-                winnerIndex = ballot[i][0];
+            
+
+            temp = max(maximumVoter, count[i]);
+            if(temp > maximumVoter){
+                maximumVoter = temp;
+                winnerIndex.clear();
+                winnerIndex.push_back(ballot[i][0]);
             }
+            else if (temp == maximumVoter){
+                maximumVoter = temp;
+                winnerIndex.push_back(ballot[i][0]);
+            }
+
+
+            
         }
+
     }
 
-    //candidates with no ballots
-    for(int i = 0; i < candidTotalNum; i++){
-        if(count[i] == 0){
-            win = false;
-        }
-    }
-    //majority wins
-    if(maximumVoter > (ballotNum/2) || maximumVoter == minimumVoter){
-        for(int i = 0; i<candidTotalNum; i++){
-            if(count[i] == maximumVoter){
-                  resultName.push_back(candidName[i]);
-            }
-        }
-    }
+    for(int i = 0; i < winnerIndex.size(); i++)
+        cout << "winnerIndex: " << winnerIndex[i] << endl;
 
-    else{
-    //find losers
-        for(int i = 0; i < candidTotalNum ; i++){
-            if(count[i] == minimumVoter){
-                loser.push_back(candidName[i]);
-            }
-        }
-    }
+
+
+    // //candidates with no ballots
+    // for(int i = 0; i < candidTotalNum; i++){
+    //     if(count[i] == 0){
+    //         win = false;
+    //     }
+    // }
+
+    // //majority wins
+    // if(maximumVoter > (ballotNum/2) || maximumVoter == minimumVoter){
+    //     for(int i = 0; i<candidTotalNum; i++){
+    //         if(count[i] == maximumVoter){
+    //               resultName.push_back(candidName[i]);
+    //         }
+    //     }
+    // }
+
+    // else{
+    // //find losers
+    //     for(int i = 0; i < candidTotalNum ; i++){
+    //         if(count[i] == minimumVoter){
+    //             loser.push_back(ballot[i][0]);
+    //             cout << "loser: " << loser[i] <<endl;
+    //         }
+
+    //     }
+    // }
+
+
     //tied candidates
     // find tvotes
                 
@@ -223,10 +291,27 @@ vector<string> voting_eval(){
 // -------------
 
 void voting_solve (std::istream& r, std::ostream& w) {
-    while (true) {
-        bool check = voting_read(r);
-        vector<string> winner = voting_eval();
+    //*******************TODO*************
+    //put case Num here
+
+    int i = 5;
+
+    while (i > 0) {
+
+
+        
+        int ballot[1000][20] = {};
+        string candidName[20] = {};
+        int candidTotalNum = 0;
+        int ballotNum = 0;
+        int caseNum = 0;
+
+
+
+        bool check = voting_read(r, ballot, candidName, candidTotalNum, ballotNum, caseNum);
+        //vector<string> winner = voting_eval();
    		//cout << winner << endl;
         //voting_print(w, p.first, p.second, v);
+        i--;
     }
 }
