@@ -61,7 +61,6 @@ bool voting_read (std::istream& r, int ballot[1000][20], string candidName[20] ,
             //check for blank line
 
             if(line.empty()){
-
                 if(!blank){
                     //case just started
                     blank = true;
@@ -149,8 +148,6 @@ bool voting_read (std::istream& r, int ballot[1000][20], string candidName[20] ,
 
 vector<string> voting_eval(int ballot[1000][20], string candidName[20], int candidTotalNum, int ballotNum){
 	
-
-
     vector<string> resultName;
 	vector<int> loser;
 	vector<int> count; //the ballot counter
@@ -162,10 +159,8 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
     bool win = true;
     int TEMP = 0;
 
-
     cout << candidTotalNum << endl;
     
-
    // cout << count[0] << endl;
 
 
@@ -176,11 +171,7 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
 		for(int j = 0; j < ballotNum; j++){
 
 			//skip index 0 for easy readible reason
-
             TEMP = ballot[j][0] - count.size();
-
-           
-            
 
             if(TEMP >= 1){
                 while(TEMP > 0){
@@ -200,46 +191,53 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
 
 
         cout << endl;
-
-
-
-
-
-
     //}
 
 
-    
-
-
-
-    // find max and min votes of a round
-    for(int i = 0; i < candidTotalNum; i++){
-
-        int temp = 0;
-        if(win){
-            minimumVoter = min(minimumVoter, count[i]);
-            
-
-            temp = max(maximumVoter, count[i]);
-            if(temp > maximumVoter){
-                maximumVoter = temp;
-                winnerIndex.clear();
-                winnerIndex.push_back(ballot[i][0]);
+        for(int i; i < candidTotalNum; i++ ){
+            if(!loser.empty()){
+                count[ballot[i][0]]; // 0 =???
             }
-            else if (temp == maximumVoter){
-                maximumVoter = temp;
-                winnerIndex.push_back(ballot[i][0]);
+            for(int j = 0; j < ballotNum; j++){
+                if(count[i] > maximumVoter){
+                    winnerIndex.clear();
+                    maximumVoter = count[i];
+                    winnerIndex.push_back(ballot[i][j]); // j??
+                }
+                else if(count[i] == maximumVoter){
+                    winnerIndex.push_back(ballot[i][j]); //j??
+                }
             }
-
-
-            
+            if(maximumVoter > (ballotNum/2) || maximumVoter == (ballotNum/winnerIndex.size())){
+                return resultName; // empty now
+            }
+            else{
+                // minimumVoter = 
+            }
         }
+    // find max and min votes of a round
+    // for(int i = 0; i < candidTotalNum; i++){
 
-    }
+    //     int temp = 0;
+    //     if(win){
+    //         minimumVoter = min(minimumVoter, count[i]);
+            
 
-    for(int i = 0; i < winnerIndex.size(); i++)
-        cout << "winnerIndex: " << winnerIndex[i] << endl;
+    //         temp = max(maximumVoter, count[i]);
+    //         if(temp > maximumVoter){
+    //             maximumVoter = temp;
+    //             winnerIndex.clear();
+    //             winnerIndex.push_back(ballot[i][0]);
+    //         }
+    //         else if (temp == maximumVoter){
+    //             maximumVoter = temp;
+    //             winnerIndex.push_back(ballot[i][0]);
+    //         }   
+    //     }
+    // }
+
+    // for(int i = 0; i < winnerIndex.size(); i++)
+    //     cout << "winnerIndex: " << winnerIndex[i] << endl;
 
 
 
