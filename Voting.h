@@ -16,6 +16,12 @@
 #include <string>
 #include <vector>
 
+struct Candidate{
+	string name;
+	int numVote;
+	bool win;
+}
+
 
 
 // ------------
