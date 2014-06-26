@@ -376,7 +376,7 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
 
         cout << "loserIndex size: " << loserIndex.size() << " " << loserIndex[0] << endl;
 
-        for(int i = 0; i < loserIndex.size(); i++){
+        for(unsigned int i = 0; i < loserIndex.size(); i++){
 
             candidateList[ loserIndex[i] ].isLoser = true; //loserIndex returns the index of loser candidate in candidateList
             candidateList[ loserIndex[i] ].numVote = 0; //set the loser vote num = 0
@@ -384,7 +384,7 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
             cout << candidateList[ loserIndex[i] ].name << endl;
 
 
-            for(int j = 0; j < candidateList[ loserIndex[i] ].ballotChoice.size(); j++){
+            for(unsigned int j = 0; j < candidateList[ loserIndex[i] ].ballotChoice.size(); j++){
 
                 ballotNumRow = candidateList[loserIndex[i]].ballotChoice[j].first;
                 ballotCol    = candidateList[loserIndex[i]].ballotChoice[j].second;
