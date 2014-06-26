@@ -214,10 +214,7 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
 
             //since the candidate # on ballot doesn't start from 0
             temp = ballot[j][0] - 1;
-
             candidateList[temp].numVote++;
-
-            cout << "1st count vote: " << candidateList[temp].name << endl;
 
             //update the ballot # and ballot column ptr
             candidateList[temp].ballotChoice.push_back(make_pair(j, 0));
@@ -230,14 +227,11 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
 
 
         cout << "while true" << endl;
-
-
         int candidateCounter = 0; //only for not 1st round usage
 
 
         for(int i = 0; i < candidTotalNum; i++){
 
-            
 
             if(candidateList[i].numVote != 0){
                 candidateCounter++;
@@ -264,7 +258,7 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
                 min = candidateList[i].numVote;
                 loserIndex.push_back(i);
             }
-            else if(candidateList[i].numVote == min){
+            else if(candidateList[i].numVote == min && candidateList[i].numVote != 0){
                 loserIndex.push_back(i);
             }
 
@@ -286,11 +280,14 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
         }
 
 
+
+
         cout << "winner size: " << winnerIndex.size() << endl;
         cout << "loser Index for 1st round: " << loserIndex.size() << candidateList[loserIndex[0]].name <<  candidateList[loserIndex[1]].name << endl;
         for(int i = 0; i < loserIndex.size(); i++){
-            cout << candidateList[loserIndex[i]].name << endl;
+            cout << "loserIndex for every round: " << candidateList[loserIndex[i]].name << " ";
         }
+        cout << endl;
 
 
 
