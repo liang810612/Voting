@@ -22,6 +22,7 @@ using namespace std;
 
 
 
+
 // ------------
 // voting_read
 // ------------
@@ -41,6 +42,8 @@ bool voting_read (std::istream& r, int ballot[1000][20], string candidName[20] ,
     bool caseStart = false;
     bool blank = false;
     bool candidNumCheck = false;
+
+    vector<Candidate> CandidateList; // list of structs
 
 
     int c = 0; //index for candidName array
@@ -126,7 +129,13 @@ bool voting_read (std::istream& r, int ballot[1000][20], string candidName[20] ,
     //need to make ballotNum = 0 for next case
 
    //cout << candidNum << " ";
-    voting_eval(ballot, candidName, candidTotalNum, ballotNum);
+
+
+
+
+
+
+ voting_eval(ballot, candidName, candidTotalNum, ballotNum);
 
     return true; 
 }
@@ -146,141 +155,191 @@ bool voting_read (std::istream& r, int ballot[1000][20], string candidName[20] ,
 // -------------
 
 
-vector<string> voting_eval(int ballot[1000][20], string candidName[20], int candidTotalNum, int ballotNum){
+vector<Candidate> voting_eval(int ballot[1000][20], string candidName[20], int candidTotalNum, int ballotNum){
 	
-    vector<string> resultName;
-	vector<int> loser;
-	vector<int> count; //the ballot counter
-    vector<int> winnerIndex;
-    int maximumVoter = 0;
-    int minimumVoter = ballotNum;
-    int minCandid = -1;
-    int maxCan;
+
+    vector<Candidate> winnerIndex;
+    vector<Candidate> loserIndex;
+    vector<Candidate> remainIndex; // For not 1st round only, all candidates whose numVote != 0
+
+
+    int max = 0;
+    int min = ballotNum;
+
+
     bool win = true;
     int TEMP = 0;
 
+    bool result = false; 
+    bool firstRound = true;
+    int currentCol = 0;
+
+    vector<Candidate> CandidateList;
+
     cout << candidTotalNum << endl;
-    
-   // cout << count[0] << endl;
+
+    struct Candidate candidateList[candidTotalNum];
 
 
-	// // //no cache ver
-	//for(int i = 0; i < candidTotalNum; i++){
+
+    //Initialize all candidates
+    for(int i = 0; i < candidTotalNum; i++){
+        
+        candidateList[i].name = candidName[i];
+        candidateList[i].numVote = 0;
+        candidateList[i].isLoser = false; 
+    }
 
 
-		for(int j = 0; j < ballotNum; j++){
 
-			//skip index 0 for easy readible reason
-            TEMP = ballot[j][0] - count.size();
+    //count vote
+    for(int j = 0; j < ballotNum; j++){
+            int temp = ballot[j][currentCol] - 1;
 
-            if(TEMP >= 1){
-                while(TEMP > 0){
-                    count.push_back(0);
-                    TEMP--;
-                }
-                count[ballot[j][0]-1] +=1; //since index starts from 0
+            candidateList[temp].numVote++;
+
+            //update the ballot # and ballot column ptr
+            candidateList[temp].ballotChoice.push_back(make_pair(j, currentCol));
+
+
+            //trying to find max winner
+            if(candidateList[temp].numVote > max){
+                winnerIndex.clear();
+                max = candidateList[temp].numVote;
+                winnerIndex.push_back(candidateList[temp]);
             }
-            else{//( TEMP < 1)
-                count[ballot[j][0]-1] += 1;
+            else if(candidateList[temp].numVote == max){
+                winnerIndex.push_back(candidateList[temp]);
             }
 
-            cout << "count size : " << count.size() << endl;
-            cout << ballot[j][0] << " " << count[ballot[j][0]-1] << endl;
-            //cout << count[j] << " ";
-		}
-
-
-        cout << endl;
-    //}
-
-
-        for(int i; i < candidTotalNum; i++ ){
-            if(!loser.empty()){
-                count[ballot[i][0]]; // 0 =???
+            //trying to find min loser
+            else if(candidateList[temp].numVote < min){
+                loserIndex.clear();
+                min = candidateList[temp].numVote;
+                loserIndex.push_back(candidateList[temp]);
+                candidateList[temp].isLoser = true;
             }
-            for(int j = 0; j < ballotNum; j++){
-                if(count[i] > maximumVoter){
-                    winnerIndex.clear();
-                    maximumVoter = count[i];
-                    winnerIndex.push_back(ballot[i][j]); // j??
-                }
-                else if(count[i] == maximumVoter){
-                    winnerIndex.push_back(ballot[i][j]); //j??
-                }
+            else if(candidateList[temp].numVote == min){
+                loserIndex.push_back(candidateList[temp]);
+                candidateList[temp].isLoser = true;
             }
-            if(maximumVoter > (ballotNum/2) || maximumVoter == (ballotNum/winnerIndex.size())){
-                return resultName; // empty now
-            }
-            else{
-                // minimumVoter = 
-            }
-        }
-    // find max and min votes of a round
-    // for(int i = 0; i < candidTotalNum; i++){
 
-    //     int temp = 0;
-    //     if(win){
-    //         minimumVoter = min(minimumVoter, count[i]);
             
+    }
 
-    //         temp = max(maximumVoter, count[i]);
-    //         if(temp > maximumVoter){
-    //             maximumVoter = temp;
-    //             winnerIndex.clear();
-    //             winnerIndex.push_back(ballot[i][0]);
-    //         }
-    //         else if (temp == maximumVoter){
-    //             maximumVoter = temp;
-    //             winnerIndex.push_back(ballot[i][0]);
-    //         }   
-    //     }
-    // }
+    //Check for the candidate doesn't get any vote during 1st preference round
+    //we can add bool to check for 1st time
+    for(int i = 0; i < candidTotalNum; i++){
+        if(candidateList[i].numVote == 0){
+            loserIndex.push_back(candidateList[i]);
+            candidateList[i].isLoser = true;
+        }
+    }
 
-    // for(int i = 0; i < winnerIndex.size(); i++)
-    //     cout << "winnerIndex: " << winnerIndex[i] << endl;
+    //During 1st round, if everyone gets same amount of vote number
+    if(max == min)
+        return candidateList;
 
 
+    while( !result ){
 
-    // //candidates with no ballots
-    // for(int i = 0; i < candidTotalNum; i++){
-    //     if(count[i] == 0){
-    //         win = false;
-    //     }
-    // }
+        int candidateCounter = 0; //only for not 1st round usage
 
-    // //majority wins
-    // if(maximumVoter > (ballotNum/2) || maximumVoter == minimumVoter){
-    //     for(int i = 0; i<candidTotalNum; i++){
-    //         if(count[i] == maximumVoter){
-    //               resultName.push_back(candidName[i]);
-    //         }
-    //     }
-    // }
+        if( ! firstRound ){
+            //get max and min
+            remainIndex.clear();
 
-    // else{
-    // //find losers
-    //     for(int i = 0; i < candidTotalNum ; i++){
-    //         if(count[i] == minimumVoter){
-    //             loser.push_back(ballot[i][0]);
-    //             cout << "loser: " << loser[i] <<endl;
-    //         }
+            for(int i = 0; i < candidTotalNum; i++){
 
-    //     }
-    // }
+                remainIndex.push_back(candidateList[i]);
 
-
-    //tied candidates
-    // find tvotes
+                if(candidateList[i].numVote != 0)
+                    candidateCounter++;
                 
+                //trying to find max winner
+                if(candidateList[i].numVote > max){
+                    winnerIndex.clear();
+                    max = candidateList[i].numVote;
+                    winnerIndex.push_back(candidateList[i]);
+                }
+                else if(candidateList[i].numVote == max){
+                    winnerIndex.push_back(candidateList[i]);
+                }
 
-		//if there is a winner with more than half votes and most votes 
-		// auto it = max_element(count.begin(), count.end());
-		// if(it > (ballotNum / 2)){
-		// 	resultName.push_back();
-		// }
 
-	return resultName;
+                //trying to find min loser
+                // it's possible the candidate is a winner but didn't get any vote at second round, we are trying to find new losers
+                else if(candidateList[i].numVote < min && candidateList[i].numVote != 0){
+                    loserIndex.clear();
+                    min = candidateList[i].numVote;
+                    loserIndex.push_back(candidateList[i]);
+                    candidateList[i].isLoser = true;
+                }
+                else if(candidateList[i].numVote == min){
+                    loserIndex.push_back(candidateList[i]);
+                    candidateList[i].isLoser = true;
+                }
+
+
+
+            }
+
+            if( max == (ballotNum / candidateCounter) )
+                return remainIndex;
+
+        }
+
+
+        
+
+
+        if(max >= (ballotNum / 2) ){
+            return winnerIndex;
+        }
+
+      
+
+
+        //If no winner for this round
+        int ballotNumRow; //which ballot # votes this loser candidate
+        int ballotCol;    //which column last read
+
+        for(int i = 0; i < loserIndex.size(); i++){
+
+            for(int j = 0; j < loserIndex[i].ballotChoice.size(); j++){
+                ballotNumRow = loserIndex[i].ballotChoice[j].first;
+                ballotCol    = loserIndex[i].ballotChoice[j].second;
+                loserIndex[i].numVote = 0; //set the loser vote num = 0
+
+                //count for the loser ballot votes, give them to other candidates
+                for(int k = ballotCol + 1; k < candidTotalNum; k++){
+
+                       if( ! candidateList[ ballot[ballotNumRow][ballotCol] ].isLoser ){
+                            candidateList[ ballot[ballotNumRow][ballotCol] ].numVote++; //Add Vote to the candidate who is not a loser but a next preference on current ballot 
+                            candidateList[ ballot[ballotNumRow][ballotCol] ].ballotChoice.first = ballotNumRow;
+                            candidateList[ ballot[ballotNumRow][ballotCol] ].ballotChoice.second = k;
+                       } 
+                }
+
+            }
+            
+        }
+
+        firstRound = false;
+        max = 0;
+        min = ballotNum;
+
+    }
+
+
+
+
+    
+
+
+	return winnerIndex;
 }
+
 
 
 
@@ -303,6 +362,8 @@ void voting_solve (std::istream& r, std::ostream& w) {
         int candidTotalNum = 0;
         int ballotNum = 0;
         int caseNum = 0;
+
+
 
 
 
