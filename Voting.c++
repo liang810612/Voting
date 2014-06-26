@@ -166,8 +166,7 @@ vector<Candidate> voting_eval(int ballot[1000][20], string candidName[20], int c
     int max = 0;
     int min = ballotNum;
 
-
-    bool win = true;
+    //bool win = true;
     int temp = 0;
 
     bool result = false; 
@@ -309,9 +308,9 @@ vector<Candidate> voting_eval(int ballot[1000][20], string candidName[20], int c
         int ballotNumRow; //which ballot # votes this loser candidate
         int ballotCol;    //which column last read
 
-        for(int i = 0; i < loserIndex.size(); i++){
+        for(unsigned int i = 0; i < loserIndex.size(); i++){
 
-            for(int j = 0; j < loserIndex[i].ballotChoice.size(); j++){
+            for(unsigned int j = 0; j < loserIndex[i].ballotChoice.size(); j++){
 
                 ballotNumRow = loserIndex[i].ballotChoice[j].first;
                 ballotCol    = loserIndex[i].ballotChoice[j].second;
