@@ -18,10 +18,8 @@
 #include <vector>
 
 #include "Voting.h"
+
 using namespace std;
-
-
-
 
 // ------------
 // voting_read
@@ -30,7 +28,6 @@ using namespace std;
 bool voting_read (std::istream& r) {
     //char split_char = "\n";
 
-
     cout << "I am here" << endl;
 
     string line;
@@ -38,7 +35,6 @@ bool voting_read (std::istream& r) {
   
     int ballot[1000][20] = {};
     string candidName[20] = {};
-
 
     
     int candidNum = 0;
@@ -50,17 +46,11 @@ bool voting_read (std::istream& r) {
     bool blank = false;
     bool candidNumCheck = false;
 
-
-
     int c = 0; //index for candidName array
-
-
 
     while ( getline(r, line)){
         iss.clear();
         iss.str(line);
-
-    
 
         if(!caseStart){
             caseNum = atoi(line.c_str());
@@ -68,9 +58,7 @@ bool voting_read (std::istream& r) {
         }
         else{
             //check for blank line
-
             //cout <<  "line size: " << line.size() << endl;
-
             if(line.empty() ||  (line.size() == 1 && !isalpha(line[0]) && !isdigit(line[0]) ) ) {
                 if(!blank){
                     cout << "I am here blank" << endl;
@@ -84,15 +72,13 @@ bool voting_read (std::istream& r) {
                     blank = false;
                 }
             }
-            else{
-                
+            else{   
                 if(candidNumCheck){ 
                     //if it is on the candidate number line
 
                     cout << "can total in read : " << candidTotalNum << endl;
                     candidTotalNum = atoi(line.c_str());
                     candidNumCheck = false; 
-
                 }
                 else{// check and put tokens into specific array
                 	if(isalpha(line[0])){
@@ -102,7 +88,6 @@ bool voting_read (std::istream& r) {
                 	}
                 	else{
                 		//It's checking ballot
-
 	                    string token;
 	                    stringstream s(line);
 	                    while(getline(s, token, ' ')){
@@ -114,14 +99,10 @@ bool voting_read (std::istream& r) {
 	                    candidNum  = 0;
                 	}
                 }// end of checking token array
-                
             }
-
         }// end for caseStart else
-
     }
-	
-    
+
     // for(int k = 0; k < c; k++){
     // 	cout << candidName[k] << endl;
     // }
@@ -142,17 +123,11 @@ bool voting_read (std::istream& r) {
 
    //cout << candidNum << " ";
 
-
-
-
-
-
 vector<string> result = voting_eval(ballot, candidName, candidTotalNum, ballotNum);
 
 cout << "_______________________result--------------------------------" << endl;
 
  for(int i = 0; i < result.size(); i++){
-
 
     cout << result[i] << endl;
 
@@ -180,13 +155,11 @@ cout << "_______________________result--------------------------------" << endl;
 
 vector<string> voting_eval(int ballot[1000][20], string candidName[20], int candidTotalNum, int ballotNum){
 	
-
     vector<string> winnerIndex; //save the name in CandidateList
     vector<int> loserIndex; //save the index in CandidateList
     vector<string> remainIndex; //  for the candidate who is not a loser
 
     vector<Candidate> candidateList;
-
 
     int max = 0;
     int min = ballotNum;
@@ -194,7 +167,6 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
     int temp = 0;
  
     bool firstRound = true;
-
 
     //struct Candidate candidateList[candidTotalNum];
 
@@ -216,7 +188,6 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
 
     cout << "candidateList size at beginning: " << candidateList.size() << endl;
 
-
     //count vote for 1st round(column)
     for(int j = 0; j < ballotNum; j++){
 
@@ -228,7 +199,6 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
 
             //update the ballot # and ballot column ptr
             candidateList[temp].ballotChoice.push_back(make_pair(j, 0));
-
 
             //trying to find max winner
             //if this candidate has not been saved into winnerIndex
@@ -278,17 +248,14 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
 
     while(true){
 
-
         cout << "while true" << endl;
 
-
         int candidateCounter = 0; //only for not 1st round usage
-
-        
+  
         if(firstRound == false){
             //get max and min
 
-            cout << "******Not 1st round" << endl;
+            cout << "******Not 1st round******" << endl;
 
             for(int i = 0; i < candidTotalNum; i++){
 
@@ -311,7 +278,6 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
                     winnerIndex.push_back(candidateList[i].name);
                 }
 
-
                 //trying to find min loser
                 // it's possible the candidate is a winner but didn't get any vote at second round, we are trying to find new losers
                 else if(candidateList[i].numVote < min && candidateList[i].numVote != 0){
@@ -322,9 +288,6 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
                 else if(candidateList[i].numVote == min){
                     loserIndex.push_back(i);
                 }
-
-
-
             }
 
 
@@ -336,16 +299,9 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
                     if(candidateList[i].isLoser == false){
                         remainIndex.push_back(candidateList[i].name);
                     }
-
                 }
-                return remainIndex;
-             
+                return remainIndex;      
             }
-
-
-            
-
-
         }
 
 
@@ -357,8 +313,7 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
             if(max >= (ballotNum / 2) ){
                 return winnerIndex;
             }
-        }
-        
+        } 
         else{
             if(max >= ((ballotNum / 2) +1) ){
                 return winnerIndex;
@@ -381,7 +336,7 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
             candidateList[ loserIndex[i] ].isLoser = true; //loserIndex returns the index of loser candidate in candidateList
             candidateList[ loserIndex[i] ].numVote = 0; //set the loser vote num = 0
 
-            cout << candidateList[ loserIndex[i] ].name << endl;
+            cout << "losers: " <<candidateList[ loserIndex[i] ].name << endl;
 
 
             for(unsigned int j = 0; j < candidateList[ loserIndex[i] ].ballotChoice.size(); j++){
@@ -405,14 +360,10 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
                             
                             candidateList[ temp ].ballotChoice.push_back(make_pair(ballotNumRow, k));
                             addedVote = true;
-
                        } 
-
                     k++;
                 }
-
-            }
-            
+            } 
         }
 
         // cout << "1st round remainIndex" << endl;
@@ -428,17 +379,9 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
         max = 0;
         min = ballotNum;
 
-
         cout << "while true end" << endl;
 
     }
-
-
-
-
-    
-
-
 	return winnerIndex;
 }
 
