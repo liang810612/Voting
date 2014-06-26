@@ -179,6 +179,7 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
 	
 
     vector<string> winnerIndex; //save the name in CandidateList
+    vector<int> winnerIndexNum; //store the index
     vector<int> loserIndex; //save the index in CandidateList
     vector<string> remainIndex; //  for the candidate who is not a loser
 
@@ -229,7 +230,6 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
         cout << "while true" << endl;
         int candidateCounter = 0; //only for not 1st round usage
 
-
         for(int i = 0; i < candidTotalNum; i++){
 
 
@@ -242,12 +242,27 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
 
                 cout << "max: " << candidateList[i].name << " " << candidateList[i].numVote << endl;
 
+                if(winnerIndex.empty() == false){
+                    for(int i = 0; i < winnerIndex.size(); i++){
+                        if(candidateList[i].numVote < min){
+                            loserIndex.clear();
+                            min = candidateList[i].numVote;
+                            loserIndex.push_back(i);
+                        }
+                        else if(candidateList[i].numVote == min){
+                            loserIndex.push_back(i);
+                        }
+                    }
+                }
+
                 winnerIndex.clear();
                 max = candidateList[i].numVote;
                 winnerIndex.push_back(candidateList[i].name);
+                winnerIndexNum.push_back(i);
             } 
             else if(candidateList[i].numVote == max){
                 winnerIndex.push_back(candidateList[i].name);
+                winnerIndexNum.push_back(i);
             }
 
 
@@ -261,7 +276,6 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
             else if(candidateList[i].numVote == min && candidateList[i].numVote != 0){
                 loserIndex.push_back(i);
             }
-
 
 
         }
@@ -283,9 +297,9 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
 
 
         cout << "winner size: " << winnerIndex.size() << endl;
-        cout << "loser Index for 1st round: " << loserIndex.size() << candidateList[loserIndex[0]].name <<  candidateList[loserIndex[1]].name << endl;
+        cout << "loserIndex for every round: ";
         for(int i = 0; i < loserIndex.size(); i++){
-            cout << "loserIndex for every round: " << candidateList[loserIndex[i]].name << " ";
+            cout << candidateList[loserIndex[i]].name << " ";
         }
         cout << endl;
 
@@ -342,7 +356,7 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
             candidateList[ loserIndex[i] ].isLoser = true; //loserIndex returns the index of loser candidate in candidateList
             candidateList[ loserIndex[i] ].numVote = 0; //set the loser vote num = 0
 
-            cout << candidateList[ loserIndex[i] ].name << endl;
+            cout << "loser Name: " << candidateList[ loserIndex[i] ].name << endl;
 
 
             for(int j = 0; j < candidateList[ loserIndex[i] ].ballotChoice.size(); j++){
@@ -361,7 +375,7 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
 
                        if(candidateList[ temp ].isLoser == false){
 
-                            cout << "candidateList[ temp ].name: " << candidateList[ temp ].name << endl;
+                            cout << "who will get vote: " << candidateList[ temp ].name << endl;
                             candidateList[ temp ].numVote++; //Add Vote to the candidate who is not a loser but a next preference on current ballot 
                             
                             candidateList[ temp ].ballotChoice.push_back(make_pair(ballotNumRow, k));
@@ -379,7 +393,7 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
         for(int i = 0; i < candidTotalNum; i++){
 
                     
-                        cout << candidateList[i].numVote << " ";
+                cout << candidateList[i].numVote << " ";
                     
         }
 
