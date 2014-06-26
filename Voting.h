@@ -58,7 +58,7 @@ void voting_print (std::ostream&, int, int, int);
 // voting_eval
 // -------------
 
-vector<Candidate> voting_eval(int [1000][20], std::string [20], int, int);
+std::vector<Candidate> voting_eval(int [1000][20], std::string [20], int, int);
 
 
 

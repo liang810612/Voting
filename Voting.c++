@@ -168,7 +168,7 @@ vector<Candidate> voting_eval(int ballot[1000][20], string candidName[20], int c
 
 
     bool win = true;
-    int TEMP = 0;
+    int temp = 0;
 
     bool result = false; 
     bool firstRound = true;
@@ -194,7 +194,9 @@ vector<Candidate> voting_eval(int ballot[1000][20], string candidName[20], int c
 
     //count vote
     for(int j = 0; j < ballotNum; j++){
-            int temp = ballot[j][currentCol] - 1;
+
+
+            temp = ballot[j][currentCol] - 1;
 
             candidateList[temp].numVote++;
 
@@ -224,12 +226,15 @@ vector<Candidate> voting_eval(int ballot[1000][20], string candidName[20], int c
                 candidateList[temp].isLoser = true;
             }
 
+            remainIndex.push_back(candidateList[temp]);
+
             
     }
 
     //Check for the candidate doesn't get any vote during 1st preference round
     //we can add bool to check for 1st time
     for(int i = 0; i < candidTotalNum; i++){
+
         if(candidateList[i].numVote == 0){
             loserIndex.push_back(candidateList[i]);
             candidateList[i].isLoser = true;
@@ -238,7 +243,7 @@ vector<Candidate> voting_eval(int ballot[1000][20], string candidName[20], int c
 
     //During 1st round, if everyone gets same amount of vote number
     if(max == min)
-        return candidateList;
+        return remainIndex;
 
 
     while( !result ){
@@ -307,17 +312,19 @@ vector<Candidate> voting_eval(int ballot[1000][20], string candidName[20], int c
         for(int i = 0; i < loserIndex.size(); i++){
 
             for(int j = 0; j < loserIndex[i].ballotChoice.size(); j++){
+
                 ballotNumRow = loserIndex[i].ballotChoice[j].first;
                 ballotCol    = loserIndex[i].ballotChoice[j].second;
                 loserIndex[i].numVote = 0; //set the loser vote num = 0
 
                 //count for the loser ballot votes, give them to other candidates
                 for(int k = ballotCol + 1; k < candidTotalNum; k++){
+                    temp = ballot[ballotNumRow][ballotCol] -1;
 
-                       if( ! candidateList[ ballot[ballotNumRow][ballotCol] ].isLoser ){
-                            candidateList[ ballot[ballotNumRow][ballotCol] ].numVote++; //Add Vote to the candidate who is not a loser but a next preference on current ballot 
-                            candidateList[ ballot[ballotNumRow][ballotCol] ].ballotChoice.first = ballotNumRow;
-                            candidateList[ ballot[ballotNumRow][ballotCol] ].ballotChoice.second = k;
+                       if( ! candidateList[ temp ].isLoser ){
+                            candidateList[ temp ].numVote++; //Add Vote to the candidate who is not a loser but a next preference on current ballot 
+                            candidateList[ temp ].ballotChoice[j].first = ballotNumRow;
+                            candidateList[ temp ].ballotChoice[j].second = k;
                        } 
                 }
 
