@@ -27,23 +27,29 @@ using namespace std;
 // voting_read
 // ------------
 
-bool voting_read (std::istream& r, int ballot[1000][20], string candidName[20] , int cTN, int bN, int cN) {
+bool voting_read (std::istream& r) {
     //char split_char = "\n";
+
+
+    cout << "I am here" << endl;
 
     string line;
     istringstream iss;
+  
+    int ballot[1000][20] = {};
+    string candidName[20] = {};
+
 
     
     int candidNum = 0;
-    int candidTotalNum = cTN;
-    int ballotNum = bN;
-    int caseNum = cN;
+    int candidTotalNum = 0;
+    int ballotNum = 0;
+    int caseNum = 0;
 
     bool caseStart = false;
     bool blank = false;
     bool candidNumCheck = false;
 
-    vector<Candidate> CandidateList; // list of structs
 
 
     int c = 0; //index for candidName array
@@ -63,8 +69,12 @@ bool voting_read (std::istream& r, int ballot[1000][20], string candidName[20] ,
         else{
             //check for blank line
 
-            if(line.empty()){
+            //cout <<  "line size: " << line.size() << endl;
+
+            if(line.empty() ||  (line.size() == 1 && !isalpha(line[0]) && !isdigit(line[0]) ) ) {
                 if(!blank){
+                    cout << "I am here blank" << endl;
+
                     //case just started
                     blank = true;
                     candidNumCheck = true;
@@ -78,6 +88,8 @@ bool voting_read (std::istream& r, int ballot[1000][20], string candidName[20] ,
                 
                 if(candidNumCheck){ 
                     //if it is on the candidate number line
+
+                    cout << "can total in read : " << candidTotalNum << endl;
                     candidTotalNum = atoi(line.c_str());
                     candidNumCheck = false; 
 
@@ -186,7 +198,7 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
 
     //struct Candidate candidateList[candidTotalNum];
 
-   
+    cout << "total Candidate: " << candidTotalNum << endl;
 
     //Initialize all candidates
     for(int i = 0; i < candidTotalNum; i++){
@@ -446,18 +458,10 @@ void voting_solve (std::istream& r, std::ostream& w) {
     while (i > 0) {
 
 
-        
-        int ballot[1000][20] = {};
-        string candidName[20] = {};
-        int candidTotalNum = 0;
-        int ballotNum = 0;
         int caseNum = 0;
 
 
-
-
-
-        bool check = voting_read(r, ballot, candidName, candidTotalNum, ballotNum, caseNum);
+        bool check = voting_read(r);
         //vector<string> winner = voting_eval();
    		//cout << winner << endl;
         //voting_print(w, p.first, p.second, v);
