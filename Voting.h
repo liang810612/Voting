@@ -55,6 +55,10 @@ std::vector<std::string> voting_read (std::istream&);
  */
 void voting_print (std::ostream&, std::vector<std::string>);
 
+
+
+std::vector<Candidate> voting_arrange_loser_vote (std::vector<Candidate>&, int [1000][20],  std::vector<int>);
+
 // -------------
 // voting_eval
 // -------------
