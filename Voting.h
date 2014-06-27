@@ -17,6 +17,7 @@
 #include <vector>
 
 
+
 struct Candidate {
 	std::string name;
 	int numVote;
@@ -38,7 +39,7 @@ struct Candidate {
  * @param  r a  std::istream
  * @return a pair of the two ints, otherwise a pair of zeros
  */
-bool voting_read (std::istream&);
+std::vector<std::string> voting_read (std::istream&);
 
 
 // -------------
@@ -52,7 +53,7 @@ bool voting_read (std::istream&);
  * @param j the end       of the range, inclusive
  * @param v the max cycle length
  */
-void voting_print (std::ostream&, int, int, int);
+void voting_print (std::ostream&, std::vector<std::string>);
 
 // -------------
 // voting_eval

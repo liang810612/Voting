@@ -21,14 +21,17 @@
 using namespace std;
 
 
+int caseNum;
+int blank;
+bool firstCase;
+
 
 
 // ------------
 // voting_read
 // ------------
 
-bool voting_read (std::istream& r) {
-    //char split_char = "\n";
+vector<string> voting_read (std::istream& r) {
 
 
     string line;
@@ -37,12 +40,11 @@ bool voting_read (std::istream& r) {
     int ballot[1000][20] = {};
     string candidName[20] = {};
 
-
+    vector<string> result;
     
     int candidNum = 0;
     int candidTotalNum = 0;
     int ballotNum = 0;
-    int caseNum = 0;
 
     bool caseStart = false;
     bool blank = false;
@@ -50,49 +52,38 @@ bool voting_read (std::istream& r) {
 
 
 
+
     int c = 0; //index for candidName array
 
-
-
-    while ( getline(r, line)){
+    while (getline(r, line)){
         iss.clear();
         iss.str(line);
 
-    
-
-        if(!caseStart){
+        if(firstCase){
             caseNum = atoi(line.c_str());
-            caseStart = true;
+            firstCase = false;
         }
+
         else{
+        
             //check for blank line
 
-            //cout <<  "line size: " << line.size() << endl;
+            if(line.empty() ||  (line[0] == '\n') || ( (int)line[0] == 0)) { 
 
-            if(line.empty() ||  (line.size() == 1 && !isalpha(line[0]) && !isdigit(line[0]) ) ) {
-                if(!blank){
-
-                    //case just started
-                    blank = true;
                     candidNumCheck = true;
-                }
-                else{
-                    //end of case
-                    blank = false;
-                }
+                    blank = true;
             }
             else{
                 
                 if(candidNumCheck){ 
                     //if it is on the candidate number line
-
-                    
                     candidTotalNum = atoi(line.c_str());
                     candidNumCheck = false; 
 
                 }
                 else{// check and put tokens into specific array
                 	if(isalpha(line[0])){
+
                 		//It's checking candidate's name
                 		candidName[c] = line;
                 		c++;
@@ -107,57 +98,29 @@ bool voting_read (std::istream& r) {
 	                        ballot[ballotNum][candidNum] = atoi(token.c_str());
 	                        candidNum++;
 	                    }
+
 	                    ballotNum++;
 	                    candidNum  = 0;
+
+
+                        if(blank){
+
+                            if(r.peek() == '\n' || int(r.peek()) == -1 ){
+                                result = voting_eval(ballot, candidName, candidTotalNum, ballotNum);
+                                return result; 
+                            }
+                        }
                 	}
                 }// end of checking token array
                 
             }
 
-        }// end for caseStart else
+        }// end for first else
 
     }
-	
-    
-    // for(int k = 0; k < c; k++){
-    // 	cout << candidName[k] << endl;
-    // }
-    
-    
-    // for(int i = 0; i < ballotNum; i++){
-
-    //     for(int j = 0; j < candidTotalNum; j++){
-    //         cout << ballot[i][j] << " ";
-    //     }
-    //     cout << endl;
-    // }
-    
-    
-
-//*************************TODO******************************
-    //need to make ballotNum = 0 for next case
-
-   //cout << candidNum << " ";
 
 
-
-
-
-
-vector<string> result = voting_eval(ballot, candidName, candidTotalNum, ballotNum);
-
-cout << "_______________________result--------------------------------" << endl;
-
- for(int i = 0; i < result.size(); i++){
-
-
-    cout << result[i] << endl;
-
- }
-
- cout << "-------------------------result end----------------" << endl;
-
-    return true; 
+    return result; 
 }
 	
 
@@ -166,8 +129,13 @@ cout << "_______________________result--------------------------------" << endl;
 // -------------
 
 
-//void voting_print (std::ostream& w, int i, int j, int v) {
-    //w << i << " " << j << " " << v << std::endl;}
+void voting_print (std::ostream& w, vector<string> result) {
+
+    for(int i = 0; i < result.size(); i++){
+        w << result[i] << endl;
+    }
+
+}
 
 
 // -------------
@@ -227,7 +195,6 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
     while(true){
 
 
-        cout << "while true" << endl;
         int candidateCounter = 0; //only for not 1st round usage
 
         for(int i = 0; i < candidTotalNum; i++){
@@ -239,8 +206,6 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
             
             //trying to find max winner
             if(candidateList[i].numVote > max){
-
-                cout << "max: " << candidateList[i].name << " " << candidateList[i].numVote << endl;
 
                 if(winnerIndex.empty() == false){
                     for(int i = 0; i < winnerIndex.size(); i++){
@@ -280,7 +245,6 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
 
         }
 
-
         if(firstRound){ // only for 1st round since loser's vote will be allocated to others in the other rounds
                 //Check for the candidate doesn't get any vote during 1st preference round
             for(int i = 0; i < candidTotalNum; i++){
@@ -292,18 +256,6 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
             }
             firstRound = false;
         }
-
-
-
-
-        cout << "winner size: " << winnerIndex.size() << endl;
-        cout << "loserIndex for every round: ";
-        for(int i = 0; i < loserIndex.size(); i++){
-            cout << candidateList[loserIndex[i]].name << " ";
-        }
-        cout << endl;
-
-
 
         //check for everone tied
         if((ballotNum % candidateCounter) == 0 && max == (ballotNum / candidateCounter)){
@@ -320,16 +272,7 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
         }
 
 
-            
-
-
-        //}
-
-
-        
-
         // > 50%
-        cout << "ballotNum: " << ballotNum << endl;
         if(ballotNum % 2 == 0){
             if(max >= (ballotNum / 2) ){
                 return winnerIndex;
@@ -342,10 +285,6 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
             }
         } 
         
-        
-
-      
-
 
         //If no winner for this round
         int ballotNumRow; //which ballot # votes this loser candidate
@@ -355,8 +294,6 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
 
             candidateList[ loserIndex[i] ].isLoser = true; //loserIndex returns the index of loser candidate in candidateList
             candidateList[ loserIndex[i] ].numVote = 0; //set the loser vote num = 0
-
-            cout << "loser Name: " << candidateList[ loserIndex[i] ].name << endl;
 
 
             for(int j = 0; j < candidateList[ loserIndex[i] ].ballotChoice.size(); j++){
@@ -369,13 +306,11 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
                 //count for the loser ballot votes, give them to other candidates
                 
                 while(addedVote == false){
-                //for(int k = ballotCol + 1; k < candidTotalNum; k++){
 
                     temp = ballot[ballotNumRow][k] -1;
 
                        if(candidateList[ temp ].isLoser == false){
 
-                            cout << "who will get vote: " << candidateList[ temp ].name << endl;
                             candidateList[ temp ].numVote++; //Add Vote to the candidate who is not a loser but a next preference on current ballot 
                             
                             candidateList[ temp ].ballotChoice.push_back(make_pair(ballotNumRow, k));
@@ -390,43 +325,15 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
             
         }
 
-        for(int i = 0; i < candidTotalNum; i++){
-
-                    
-                cout << candidateList[i].numVote << " ";
-                    
-        }
-
-        cout << endl;
-
-
-        // cout << "1st round remainIndex" << endl;
-
-        // for(int i= 0; i < candidTotalNum; i++){
-        //     if(candidateList[i].isLoser == false)
-        //         cout << candidateList[i].name << endl;
-
-        // }
-        // cout << "####################################" << endl;
 
 
         max = 0;
         min = ballotNum;
 
-
-        cout << "while true end" << endl;
-
     }//end of while(true)
-
-
-
-
-    
-
 
 	return winnerIndex;
 }
-
 
 
 
@@ -438,18 +345,19 @@ void voting_solve (std::istream& r, std::ostream& w) {
     //*******************TODO*************
     //put case Num here
 
-    int i = 2;
+    caseNum = 1; //temp, it will change after 1st read
+    blank = 0;
+    firstCase = true;
 
-    while (i > 0) {
+    while (caseNum > 0) {
 
 
-        int caseNum = 0;
+        vector<string> result = voting_read(r);
 
+        voting_print(w, result);
 
-        bool check = voting_read(r);
-        //vector<string> winner = voting_eval();
-   		//cout << winner << endl;
-        //voting_print(w, p.first, p.second, v);
-        i--;
+        cout << endl;
+
+        caseNum--;
     }
 }
