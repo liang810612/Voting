@@ -132,8 +132,15 @@ vector<string> voting_read (std::istream& r) {
 void voting_print (std::ostream& w, vector<string> result) {
 
     for(int i = 0; i < result.size(); i++){
-        w << result[i] << endl;
+
+        if(caseNum == 1 && i == result.size() -1)
+            w << result[i];
+        else
+            w << result[i] << endl;
     }
+
+    if(caseNum != 1)
+        w << endl;
 
 }
 
@@ -355,8 +362,6 @@ void voting_solve (std::istream& r, std::ostream& w) {
         vector<string> result = voting_read(r);
 
         voting_print(w, result);
-
-        cout << endl;
 
         caseNum--;
     }
