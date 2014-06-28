@@ -1,0 +1,22 @@
+commit 1ee07e20b77f1eaba3698491c345fbe8c3fd4ae5
+Merge: 215d551 8852101
+Author: Terry Liang <liang810612@hotmail.com>
+Date:   Fri Jun 27 20:05:51 2014 -0500
+
+    Merge branch 'master' of github.com:liang810612/cs378-voting
+
+commit 215d55141b6b0211cb8cc3f7b861795a76efca98
+Author: Terry Liang <liang810612@hotmail.com>
+Date:   Fri Jun 27 20:05:30 2014 -0500
+
+    for public repo
+
+commit 88521019cb11d79c8c0a372c30942b5038beed54
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Fri Jun 27 19:59:56 2014 -0500
+
+    working for all other cases, but RE on UVa.
+
+commit 9d3a91f324afdc59017861c674a3221095460878
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Fri Jun 27 16:25:47 2014 -0500
