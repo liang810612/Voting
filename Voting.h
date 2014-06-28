@@ -24,7 +24,7 @@ struct Candidate {
 	bool isLoser;
 	//1st int in pair is the index # of ballot in ballot[][] which votes for this candidate
 	//2nd int in pair is the last read ptr indicates which choice column it was reading	 
-	std::vector< std::pair<int, int> > ballotChoice; 	
+	std::vector< std::pair<int, int> > ballotChoice {}; 	
 };
 
 
