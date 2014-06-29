@@ -1,0 +1,207 @@
+commit 88521019cb11d79c8c0a372c30942b5038beed54
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Fri Jun 27 19:59:56 2014 -0500
+
+    working for all other cases, but RE on UVa.
+
+commit 9d3a91f324afdc59017861c674a3221095460878
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Fri Jun 27 16:25:47 2014 -0500
+
+    it passes acceptance tests on test repo
+
+commit abc70f0cd24205488c1d6a22efee3af0cd4150ee
+Author: Terry Liang <liang810612@hotmail.com>
+Date:   Thu Jun 26 22:01:10 2014 -0500
+
+    first commit
+
+commit 9aa9342a3858fb94a392d51e8cb5ec59cad9d163
+Author: Terry Liang <liang810612@hotmail.com>
+Date:   Thu Jun 26 21:59:57 2014 -0500
+
+    first commit
+
+commit f7d9c66fada05e34e60b05d23bcea6bb032be2bb
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Thu Jun 26 21:15:43 2014 -0500
+
+    hope this is good, format is good
+
+commit 6571ed13568b5652e99bfa6e12fc3ab253df3d88
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Thu Jun 26 21:07:58 2014 -0500
+
+    hope this is final
+
+commit 3071ba1815fd3bce69b562de584abc6b9b091142
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Thu Jun 26 18:47:08 2014 -0500
+
+    passed
+
+commit 09fa7d062dff1c0d63a3d6de4e701a9e19d67e0e
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Thu Jun 26 18:20:25 2014 -0500
+
+    passes 1st and 2nd round, but not 3rd round for piazza case
+
+commit 29d9239a09a728b01608ccf411ec47cf51d7a127
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Thu Jun 26 18:14:11 2014 -0500
+
+    passes 1st and 2nd round, but not 3rd round for piazza case
+
+commit f2b925c2fbc7f2a2cd250718ebbee9668302c18b
+Merge: 41f4085 7cdb2b5
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Thu Jun 26 17:11:41 2014 -0500
+
+    fixed conflict and this is the file working for sample case
+
+commit 41f4085bdbb2e9fda085b277cfe0a541d82a6021
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Thu Jun 26 17:08:53 2014 -0500
+
+    added a test case
+
+commit 4bd2861ff7f1a004cdfcd4d44aad74572c7ad1e6
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Thu Jun 26 17:07:55 2014 -0500
+
+    working with sample case online
+
+commit 7cdb2b53ff00a4168c848ec91e54c2df5c0d4df1
+Author: Terry Liang <liang810612@hotmail.com>
+Date:   Thu Jun 26 17:01:48 2014 -0500
+
+    cleaner code
+
+commit 70661ef3ba8f415ee7d66458bb9f88ce490420f1
+Author: Terry Liang <liang810612@hotmail.com>
+Date:   Thu Jun 26 16:28:10 2014 -0500
+
+    unsigned int for loop
+
+commit c3e56200b728c37e41d66f60ad61ca44422375c1
+Author: Terry Liang <liang810612@hotmail.com>
+Date:   Thu Jun 26 16:16:28 2014 -0500
+
+    commit changes
+
+commit e9df74b6516a746f934bff43b50ce9f70cbea79d
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Thu Jun 26 15:30:04 2014 -0500
+
+    passed the sample input, but not the test case on piazza
+
+commit 6a1616c80a9cd9bf0718107ab4ac629336864b2f
+Author: Terry Liang <liang810612@hotmail.com>
+Date:   Thu Jun 26 13:37:17 2014 -0500
+
+    unsigned int for loop
+
+commit 1d857891725fe06245cb189685e8d2b44d483841
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Thu Jun 26 02:06:08 2014 -0500
+
+    compiled and ran, haven't check the result yet
+
+commit 084a942727efbd7bfb54f3c76998ec0eb2c85d48
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Wed Jun 25 22:06:52 2014 -0500
+
+    logic draft without compile
+
+commit 5f4eb904e49ddaf723ebafea587ba63d8c6836a0
+Author: Terry Liang <liang810612@hotmail.com>
+Date:   Wed Jun 25 17:58:08 2014 -0500
+
+    add candidate struct
+
+commit d1a0f89baee972044fd8e803683139dcafd71cbc
+Author: Terry Liang <liang810612@hotmail.com>
+Date:   Wed Jun 25 17:30:28 2014 -0500
+
+    reimplement algo
+
+commit fbc3c9148f01c7e188e3aa358bfc28546445816c
+Merge: 8c1f466 80d2aa8
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Tue Jun 24 22:36:48 2014 -0500
+
+    Merge branch 'master' of github.com:liang810612/cs378-voting
+    
+    I need to merge
+
+commit 8c1f466d9bbd31bda5a6910f96d205d3ea37809d
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Tue Jun 24 22:33:42 2014 -0500
+
+    not working, almost, maximumvoter part issue
+
+commit 80d2aa8f9a325a5fd94dcafaaf17592fa5630aeb
+Author: Terry Liang <liang810612@hotmail.com>
+Date:   Tue Jun 24 18:29:12 2014 -0500
+
+    information changed
+
+commit 0b64072e51687d26b281b1d2bf75ff80036750c9
+Author: Terry Liang <liang810612@hotmail.com>
+Date:   Tue Jun 24 18:25:25 2014 -0500
+
+    still working on simple solution
+
+commit 338914085e091f215f64cebc29a95adf94326468
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Tue Jun 24 01:44:41 2014 -0500
+
+    problem with overflow
+
+commit 84c6f25598c155cbf95212882a5cf40a02067e04
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Tue Jun 24 00:32:45 2014 -0500
+
+    read working ver.
+
+commit cc1ceace7a81339f45710e1e6edb91a34e096c7e
+Author: chimaeraXD <sharonchung@utexas.edu>
+Date:   Mon Jun 23 23:01:04 2014 -0500
+
+    Delete Voting.in~
+
+commit 19bc62967ee7ac87a1d3b19b82849c34d3d6b58e
+Author: chimaeraXD <sharonchung@utexas.edu>
+Date:   Mon Jun 23 23:00:54 2014 -0500
+
+    Delete Voting.gcno
+
+commit cd7ae6a8e3da02ee78d60c4ebf5277595ea0ffe0
+Author: chimaeraXD <sharonchung@utexas.edu>
+Date:   Mon Jun 23 23:00:43 2014 -0500
+
+    Delete RunCollatz.c++~
+
+commit 9d6ad0c331e5d39408e4b5591bcbcbfc68468df9
+Author: chimaeraXD <sharonchung@utexas.edu>
+Date:   Mon Jun 23 23:00:30 2014 -0500
+
+    Delete Collatz.c++~
+
+commit 2f605921778ba41c745291b128670fcde60f84ba
+Author: chimaeraXD <sharonchung@utexas.edu>
+Date:   Mon Jun 23 23:00:16 2014 -0500
+
+    Delete Collatz.h~
+
+commit 85a7f431b6f6812a9881024d48f96db123d8ddc0
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Mon Jun 23 19:01:34 2014 -0500
+
+    if else condition check issue
+
+commit a4eb78a9cc7ad1f8a3aa50649e1fcefeffbf44ff
+Author: sharonc <sharonc@cs.utexas.edu>
+Date:   Mon Jun 23 18:47:26 2014 -0500
+
+    first commit: can read inputs, but still working on array
