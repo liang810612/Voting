@@ -20,7 +20,7 @@
 #include "Voting.h"
 using namespace std;
 
-
+int defaultCaseNum;
 int caseNum;
 int blank;
 bool firstCase;
@@ -38,36 +38,43 @@ vector<string> voting_read (std::istream& r) {
     istringstream iss;
   
     int ballot[1000][20] = {};
-    string candidName[20] = {};
+    vector<string> candidName {};
 
     vector<string> result {};
     
     int candidNum = 0;
     int candidTotalNum = 0;
     int ballotNum = 0;
+    int candidNumCount = 0;
 
     bool blank = false;
     bool candidNumCheck = false;
+    bool checkBallot = false;
+    bool checkCandidate = false;
 
 
 
-
-    int c = 0; //index for candidName array
 
     while (getline(r, line)){
         iss.clear();
         iss.str(line);
 
         if(firstCase){
-            caseNum = atoi(line.c_str());
+            defaultCaseNum = atoi(line.c_str());
+            caseNum = defaultCaseNum;
             firstCase = false;
+
+            if(caseNum == 0)
+                return result;
         }
 
         else{
-        
+
+      
             //check for blank line
 
             if(line.empty() ||  (line[0] == '\n') || ( (int)line[0] == 0) ) { 
+                    
 
                     candidNumCheck = true;
                     blank = true;
@@ -77,30 +84,50 @@ vector<string> voting_read (std::istream& r) {
                 if(candidNumCheck){ 
                     //if it is on the candidate number line
                     candidTotalNum = atoi(line.c_str());
+                    candidNumCount = candidTotalNum;
+
+                    if(candidTotalNum == 0)
+                        return result;
 
                     candidNumCheck = false; 
 
                 }
-                else{// check and put tokens into specific array
-                	if(isalpha(line[0])){
+                else{
 
-                		//It's checking candidate's name
-                		candidName[c] = line;
-                		c++;
-                	}
-                	else{
-                		//It's checking ballot
 
-	                    string token;
-	                    stringstream s(line);
-	                    while(getline(s, token, ' ')){
+                // check and put tokens into specific array
+                    if(candidNumCount > 0){
+                        checkCandidate = true;
 
-	                        ballot[ballotNum][candidNum] = atoi(token.c_str());
-	                        candidNum++;
-	                    }
+                        //It's checking candidate's name
+                        candidName.push_back(line);
+                        candidNumCount--;
 
-	                    ballotNum++;
-	                    candidNum  = 0;
+                        if(r.peek() == '\n' || int(r.peek()) == -1){
+
+                            if(checkBallot == false && checkCandidate == true){
+                                //no ballot
+                                result = voting_eval(ballot, candidName, candidTotalNum, ballotNum);
+                                return result; 
+                            }
+                        }
+                    }
+                
+                    else{  
+
+                        //It's checking ballot
+                        checkBallot = true;
+
+                        string token;
+                        stringstream s(line);
+                        while(getline(s, token, ' ')){
+
+                            ballot[ballotNum][candidNum] = atoi(token.c_str());
+                            candidNum++;
+                        }
+
+                        ballotNum++;
+                        candidNum  = 0;
 
 
                         if(blank){
@@ -111,7 +138,7 @@ vector<string> voting_read (std::istream& r) {
                                 return result; 
                             }
                         }
-                	}
+                    }
                 }// end of checking token array
                 
             }
@@ -123,7 +150,7 @@ vector<string> voting_read (std::istream& r) {
 
     return result; 
 }
-	
+    
 
 // -------------
 // voting_print
@@ -134,11 +161,8 @@ void voting_print (std::ostream& w, vector<string> result) {
 
     for(unsigned int i = 0; i < result.size(); i++){
 
-         //if(caseNum == 1 && i == result.size() -1)
-            //w << result[i];
+
             w << result[i] << endl;
-        //else
-            //w << result[i] << endl;
     }
 
     if(caseNum != 1)
@@ -152,8 +176,8 @@ void voting_print (std::ostream& w, vector<string> result) {
 // -------------
 
 
-vector<string> voting_eval(int ballot[1000][20], string candidName[20], int candidTotalNum, int ballotNum){
-	
+vector<string> voting_eval(int ballot[1000][20], vector<string> candidName, int candidTotalNum, int ballotNum){
+    
 
     vector<string> winnerIndex {}; //save the name in CandidateList
     vector<int> loserIndex {}; //save the index in CandidateList
@@ -170,23 +194,28 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
     bool firstRound = true;
 
 
+    if(ballotNum == 0){
+        for(int i = 0; i < candidTotalNum; i++)
+            winnerIndex.push_back(candidName[i]);
+
+        return winnerIndex;
+    }
+
     //Initialize all candidates
     for(int i = 0; i < candidTotalNum; i++){
         
         struct Candidate c;
+        vector<pair<int, int>> p {};
 
         c.name = candidName[i];
         c.numVote = 0;
         c.isLoser = false; 
-        //c.ballotChoice.clear();
+        c.ballotChoice = p;
 
         candidateList.push_back(c);
     }
-
     //count vote for 1st round(column)
     for(int j = 0; j < ballotNum; j++){
-
-            //cout << "count votes 1st time" << endl;
 
             //since the candidate # on ballot doesn't start from 0
             temp = ballot[j][0] - 1;
@@ -274,14 +303,14 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
         }
         
         else{
-            if(max >= ((ballotNum / 2) +1) ){
+            if(max >= ((ballotNum / 2) + 1) ){
                 return winnerIndex;
             }
            
         } 
 
         //no winner yet
-        voting_arrange_loser_vote (candidateList, ballot, loserIndex);
+        voting_arrange_loser_vote (candidateList, ballot, loserIndex, candidTotalNum);
 
 
         max = 0;
@@ -289,12 +318,12 @@ vector<string> voting_eval(int ballot[1000][20], string candidName[20], int cand
 
     }//end of while(true)
 
-	return winnerIndex; //fake
+    return winnerIndex; //fake
 }
 
 
 //return vector for testing purpose only
-vector<Candidate> voting_arrange_loser_vote (vector<Candidate> &candidateList, int ballot[1000][20], vector<int> loserIndex){
+vector<Candidate> voting_arrange_loser_vote (vector<Candidate> &candidateList, int ballot[1000][20], vector<int> loserIndex, int candidTotalNum){
 
     //If no winner for this round
         int ballotNumRow = 0; //which ballot # votes this loser candidate
@@ -308,42 +337,46 @@ vector<Candidate> voting_arrange_loser_vote (vector<Candidate> &candidateList, i
         //get every loser candidate in loserIndex
         for(int i = 0; i < loserIndex.size(); i++){
 
-            candidateList[ loserIndex[i] ].isLoser = true; //loserIndex returns the index of loser candidate in candidateList
-            candidateList[ loserIndex[i] ].numVote = 0; //set the loser vote num = 0
 
-            //if(candidateList[ loserIndex[i] ].ballotChoice.size())
-
-            //get each vote for this loser
-            for(int j = 0; j < candidateList[ loserIndex[i] ].ballotChoice.size(); j++){
-
-                pair <int,int> tempB = candidateList[ loserIndex[i] ].ballotChoice[j];
-
-                ballotNumRow = tempB.first; //the ballot # who votes for this loser (row index)
-                ballotCol    = tempB.second; //last reading point for this ballot (col index)
-    
-                addedVote = false;
-                k =  ballotCol + 1;
-
-                //count for the loser ballot votes, give them to other candidates
-                while(addedVote == false && k < 20){
-
-                    temp = ballot[ballotNumRow][k] -1; //since candidate # doesn't start from zero index
+            candidateList.at(loserIndex.at(i)).isLoser = true; //loserIndex returns the index of loser candidate in candidateList
+            candidateList.at(loserIndex.at(i)).numVote = 0; //set the loser vote num = 0
 
 
-                       if(candidateList[ temp ].isLoser == false){
+            if(candidateList.at(loserIndex.at(i)).ballotChoice.size() > 0){
 
-                            pair <int,int> one = make_pair(ballotNumRow, k);
+                //get each vote for this loser
+                for(int j = 0; j < candidateList.at(loserIndex.at(i)).ballotChoice.size(); j++){
 
-                            candidateList[ temp ].numVote++; //Add Vote to the candidate who is not a loser but the next preference on current ballot 
-                            candidateList[ temp ].ballotChoice.push_back(one);
-                            addedVote = true;
+                    pair <int,int> tempB = candidateList.at(loserIndex.at(i)).ballotChoice.at(j);
 
-                       } 
+                    ballotNumRow = tempB.first; //the ballot # who votes for this loser (row index)
+                    ballotCol    = tempB.second; //last reading point for this ballot (col index)
+        
+                    addedVote = false;
+                    if(ballotCol < 19)
+                        k =  ballotCol + 1;
+                    else
+                        k = ballotCol;
 
-                    k++;
-                }
+                    //count for the loser ballot votes, give them to other candidates
+                    while(addedVote == false && k < candidTotalNum){
 
+                        temp = ballot[ballotNumRow][k] -1; //since candidate # doesn't start from zero index
+
+                           if(temp < candidateList.size()){
+                                if(candidateList.at(temp).isLoser == false){
+                                    candidateList.at(temp).numVote++; //Add Vote to the candidate who is not a loser but the next preference on current ballot 
+                                    candidateList.at(temp).ballotChoice.push_back(make_pair(ballotNumRow, k));
+                                    addedVote = true;
+                                }
+                           }
+
+                        k++;
+                    }
+
+                } //end of for
             }
+            
         }
 
 
@@ -361,15 +394,18 @@ void voting_solve (std::istream& r, std::ostream& w) {
     caseNum = 1; //temp, it will change after 1st read
     blank = 0;
     firstCase = true;
+    
+    
 
     while (caseNum > 0) {
 
         vector<string> result = voting_read(r);
-
+        
         voting_print(w, result);
 
         caseNum--;
     }
+
+    if(defaultCaseNum == 0)
+        w << endl;
 }
-
-
